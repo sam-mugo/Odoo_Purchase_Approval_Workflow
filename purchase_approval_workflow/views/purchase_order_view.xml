@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_order_form_approval_confirm" model="ir.ui.view">
+        <field name="name">purchase.order.form.approval.confirm</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_confirm']" position="attributes">
+                <attribute name="invisible">state not in ['draft', 'sent']</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_form_approval_buttons" model="ir.ui.view">
+        <field name="name">purchase.order.form.approval.buttons</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_level1_approve" string="Approve Level 1" type="object"
+                    class="btn-primary"
+                    invisible="state not in ['to_approve', 'approved_level1']"
+                    groups="purchase_approval_workflow.group_purchase_approval_level1"/>
+                
+                <button name="action_level2_approve" string="Approve Level 2" type="object"
+                    class="btn-primary"
+                    invisible="state != 'approved_level1'"
+                    groups="purchase_approval_workflow.group_purchase_approval_level2"/>
+                
+                <button name="action_reject" string="Reject" type="object"
+                    class="btn-secondary"
+                    invisible="state not in ['to_approve', 'approved_level1', 'approved_level2']"/>
+            </xpath>
+            
+            <xpath expr="//sheet" position="inside">
+                <group string="Approval Information" invisible="requires_approval == False">
+                    <group>
+                        <field name="approval_level" readonly="1"/>
+                        <field name="requires_approval" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="level1_approver_id" readonly="1"/>
+                        <field name="level1_approval_date" readonly="1"/>
+                        <field name="level2_approver_id" readonly="1"/>
+                        <field name="level2_approval_date" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_list_approval" model="ir.ui.view">
+        <field name="name">purchase.order.list.approval</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list//field[@name='state']" position="after">
+                <field name="approval_level" string="Approval Level"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

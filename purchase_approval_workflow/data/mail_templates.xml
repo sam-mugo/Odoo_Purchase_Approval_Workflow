@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="email_approval_level1" model="mail.template">
+        <field name="name">Purchase Approval - Level 1</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="subject">Purchase Order {{ object.name }} Requires Level 1 Approval</field>
+        <field name="email_from">{{ user.email }}</field>
+        <field name="email_to">{{ object.level1_approver_group_id.users[0].email if object.level1_approver_group_id else '' }}</field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="body_html"><![CDATA[
+            <p>Dear Approver,</p>
+            <p>A purchase order requires your Level 1 approval:</p>
+            <ul>
+                <li>Order: <strong>{{ object.name }}</strong></li>
+                <li>Vendor: <strong>{{ object.partner_id.name }}</strong></li>
+                <li>Total Amount: <strong>{{ object.amount_total }} {{ object.currency_id.name }}</strong></li>
+                <li>Requested by: <strong>{{ object.user_id.name }}</strong></li>
+            </ul>
+            <p>Please review and approve the purchase order by clicking the link below:</p>
+            <p><a href="{{ object.get_base_url() }}/web#id={{ object.id }}&view_type=form&model=purchase.order">Review Purchase Order</a></p>
+            <p>Thank you.</p>
+        ]]></field>
+    </record>
+
+    <record id="email_approval_level2" model="mail.template">
+        <field name="name">Purchase Approval - Level 2</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="subject">Purchase Order {{ object.name }} Requires Level 2 Approval</field>
+        <field name="email_from">{{ user.email }}</field>
+        <field name="email_to">{{ object.level2_approver_group_id.users[0].email if object.level2_approver_group_id else '' }}</field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="body_html"><![CDATA[
+            <p>Dear Approver,</p>
+            <p>A purchase order requires your Level 2 approval (already approved by Level 1):</p>
+            <ul>
+                <li>Order: <strong>{{ object.name }}</strong></li>
+                <li>Vendor: <strong>{{ object.partner_id.name }}</strong></li>
+                <li>Total Amount: <strong>{{ object.amount_total }} {{ object.currency_id.name }}</strong></li>
+                <li>Level 1 Approver: <strong>{{ object.level1_approver_id.name }}</strong></li>
+                <li>Requested by: <strong>{{ object.user_id.name }}</strong></li>
+            </ul>
+            <p>Please review and approve the purchase order by clicking the link below:</p>
+            <p><a href="{{ object.get_base_url() }}/web#id={{ object.id }}&view_type=form&model=purchase.order">Review Purchase Order</a></p>
+            <p>Thank you.</p>
+        ]]></field>
+    </record>
+
+    <record id="email_rejection" model="mail.template">
+        <field name="name">Purchase Rejection</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="subject">Purchase Order {{ object.name }} Rejected</field>
+        <field name="email_from">{{ user.email }}</field>
+        <field name="email_to">{{ object.create_uid.email }}</field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="body_html"><![CDATA[
+            <p>Dear {{ object.user_id.name }},</p>
+            <p>Your purchase order has been rejected and returned to draft:</p>
+            <ul>
+                <li>Order: <strong>{{ object.name }}</strong></li>
+                <li>Vendor: <strong>{{ object.partner_id.name }}</strong></li>
+                <li>Total Amount: <strong>{{ object.amount_total }} {{ object.currency_id.name }}</strong></li>
+                <li>Rejected by: <strong>{{ user.name }}</strong></li>
+            </ul>
+            <p>Please review and resubmit the purchase order.</p>
+            <p><a href="{{ object.get_base_url() }}/web#id={{ object.id }}&view_type=form&model=purchase.order">View Purchase Order</a></p>
+        ]]></field>
+    </record>
+</odoo>
