@@ -1,5 +1,8 @@
 # Odoo_Purchase_Approval_Workflow
 
+### Compatibility
+* v17 & v18
+
 ## Approval Workflows in Business
 In most organizations, certain activities (like financial transactions, procurement, hiring, access to data, or project changes) require **authorization** before they can proceed. This is managed through an **approval workflow** — a structured process that ensures requests are reviewed and approved (or rejected) by the right people, depending on **business rules** and **user privileges**.
 

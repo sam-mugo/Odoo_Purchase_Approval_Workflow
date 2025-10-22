@@ -3,7 +3,7 @@
     "version": "1.0",
     "summary": "Three-Level Approval Workflow for Purchases",
     "category": "Purchases",
-    "author": "Custom Dev",
+    "author": "sam",
     "depends": ["purchase", "mail"],
     "data": [
         "security/purchase_approval_groups.xml",
